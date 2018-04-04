@@ -1,0 +1,28 @@
+{extend name='template/layout' /}
+{block name='content'}
+{volist name="list" id="row"}
+<div class="post_item">
+    <div class="digg">
+        <div class="clear"></div>
+        <div id="digg_tip_8710250" class="digg_tip"></div>
+    </div>
+    <div class="post_item_body">
+        <h3><a class="titlelnk" href="{:url('Question',['tid'=>$row['t_id']])}" target="_blank">{$row.tags}</a></h3>
+        <p class="post_item_summary">
+            <a href="{:url('Question/user',['uid'=>$row['u_id']])}" target="_blank"><img width="48" height="48" class="pfs" src="//pic.cnblogs.com/face/1313025/20180106104242.png" alt=""></a>    logging.basicConfig()函数中的具体参数：filename： 指定的文件名创建FiledHandler，这样日志会被存储在指定的文件中；filemode： 文件打开方式，在指定了filename时使用这个参数，默认值为“w”还可指定为“a”；format： 指定handler使用的 ...
+        </p>
+        <div class="post_item_foot">
+            <a href="{:url('Question/user',['uid'=>$row['u_id']])}" class="lightblue">{$row.uname}</a>
+            发布于 {$row.create_time}
+            <span class="article_comment"><a href="{:url('Content/index',['qid'=>$row['id']])}" title="" class="lightblue">
+           &nbsp;查看详情</a></span>
+            {if condition="$userInfo['id']==$row['u_id']"}
+            <span class="article_comment"><a href="{:url('delete',['id'=>$row['id']])}" title="" class="lightblue">
+           &nbsp;删除</a></span>
+            {/if}
+        </div>
+    </div>
+    <div class="clear"></div>
+</div>
+{/volist}
+{/block}
