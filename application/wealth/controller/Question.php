@@ -8,7 +8,7 @@ use think\Request;
 use app\wealth\controller\Base;
 use app\wealth\model\Question as QuestionModel;
 use think\Session;
-
+use app\wealth\model\User as UserModel;
 class Question extends Base
 {
     /**
@@ -21,6 +21,7 @@ class Question extends Base
         //所有主题展示
         $model=new QuestionModel();
         $list=$model->data($model->select())->toArray();
+//        dump($list);exit;
         $lists=[];
         foreach ($list as $value){
             $value['uname']=Db::table('user')->where('id',$value['u_id'])->value('username');
@@ -28,7 +29,13 @@ class Question extends Base
             $value['photo']=Db::table('user')->where('id',$value['u_id'])->value('photo');
             $lists[]=$value;
         }
-        return $this->fetch('index',['list'=>$lists,'userInfo'=>Session::get('userInfo')]);
+        $tagnames=Db::table('tag')->select();
+        $count=$model->count();
+        return $this->fetch('index',['list'=>$lists,
+            'userInfo'=>Session::get('userInfo'),
+            'tagnames'=>$tagnames,
+            'count'=>$count
+        ]);
     }
 
     /**
@@ -51,7 +58,13 @@ class Question extends Base
             $value['photo']=Db::table('user')->where('id',$value['u_id'])->value('photo');
             $lists[]=$value;
         }
-        return $this->fetch('index',['list'=>$lists,'userInfo'=>Session::get('userInfo')]);
+        $tagnames=Db::table('tag')->select();
+        $count=$model->count();
+        return $this->fetch('index',['list'=>$lists,
+            'userInfo'=>Session::get('userInfo'),
+            'tagnames'=>$tagnames,
+             'count'=>$count
+        ]);
     }
 
     /**
@@ -72,7 +85,13 @@ class Question extends Base
             $value['photo']=Db::table('user')->where('id',$value['u_id'])->value('photo');
             $lists[]=$value;
         }
-        return $this->fetch('index',['list'=>$lists,'userInfo'=>Session::get('userInfo')]);
+        $count=$model->count();
+        $tagnames=Db::table('tag')->select();
+        return $this->fetch('index', ['list'=>$lists,
+            'userInfo'=>Session::get('userInfo'),
+            'tagnames'=>$tagnames,
+            'count'=>$count
+        ]);
     }
     /**
      * 删除指定资源
@@ -84,7 +103,8 @@ class Question extends Base
     {
         $re=QuestionModel::get($id)->delete();
         if($re){
-            $cid=Db::table('content')->where('q_id',$id)->value('c_id');
+            $cid=Db::table('question_content')->where('q_id',$id)->value('c_id');
+            Db::table('question_content')->where('q_id',$id)->delete();
             $rs=Db::table('content')->where('id',$cid)->delete();
             if($rs){
                 $this->redirect('index');
@@ -92,4 +112,29 @@ class Question extends Base
         }
     }
 
+    public function search(){
+        $username=['like','%'.input("message").'%'];
+        $model=new UserModel();
+        $u_id=$model->where(['username'=>$username])->select();
+        $u_ids=[];
+        foreach ($u_id as $value){
+            $u_ids[]=$value['id'];
+        }
+        $qmodel=new QuestionModel();
+        $list=$qmodel->where(['u_id'=>['in',$u_ids]])->select();
+        $lists=[];
+        foreach ($list as $value){
+            $value['uname']=Db::table('user')->where('id',$value['u_id'])->value('username');
+            $value['tags']=Db::table('tag')->where('id',$value['t_id'])->value('tagname');
+            $value['photo']=Db::table('user')->where('id',$value['u_id'])->value('photo');
+            $lists[]=$value;
+        }
+        $count=$model->count();
+        $tagnames=Db::table('tag')->select();
+        return $this->fetch('index',['list'=>$lists,
+            'userInfo'=>Session::get('userInfo'),
+            'tagnames'=>$tagnames,
+             'count'=>$count
+        ]);
+    }
 }

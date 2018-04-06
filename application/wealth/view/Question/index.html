@@ -1,5 +1,21 @@
 {extend name='template/layout' /}
+{block name="tag_type"}
+{volist name="tagnames" id="row"}
+<ul>
+    <li>
+        <a href="{:url('Question/tag',['tid'=>$row['id']])}">{$row['tagname']}</a>
+    </li>
+</ul>
+{/volist}
+{/block}
+{block name="count"}{$count}{/block}
 {block name='content'}
+<div style="padding: 20px 300px">
+    <form action="{:url('Question/search')}" method="post" id="form-product">
+        <input type="text" name="message" style="width: 250px; height: 30px" placeholder="输入你想要查找的用户名">
+        <a style="background-color: #0d13aa;color: #FFFFFF;display: inline-block;width: 70px;height: 30px;line-height: 30px;text-align: center;margin-left: -4px; cursor: pointer" onclick="$('#form-product').submit()">点击搜索</a>
+    </form>
+</div>
 {volist name="list" id="row"}
 <div class="post_item">
     <div class="digg">
@@ -9,7 +25,7 @@
     <div class="post_item_body">
         <h3><a class="titlelnk" href="{:url('Question',['tid'=>$row['t_id']])}" target="_blank">{$row.tags}</a></h3>
         <p class="post_item_summary">
-            <a href="{:url('Question/user',['uid'=>$row['u_id']])}" target="_blank"><img width="48" height="48" class="pfs" src="//pic.cnblogs.com/face/1313025/20180106104242.png" alt=""></a>    logging.basicConfig()函数中的具体参数：filename： 指定的文件名创建FiledHandler，这样日志会被存储在指定的文件中；filemode： 文件打开方式，在指定了filename时使用这个参数，默认值为“w”还可指定为“a”；format： 指定handler使用的 ...
+            <a href="{:url('Question/user',['uid'=>$row['u_id']])}" target="_blank"><img width="48" height="48" class="pfs" src="__ROOT__/uploads/{$userInfo.photo}" alt=""></a>{$row.title}
         </p>
         <div class="post_item_foot">
             <a href="{:url('Question/user',['uid'=>$row['u_id']])}" class="lightblue">{$row.uname}</a>

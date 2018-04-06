@@ -8,7 +8,7 @@ use think\Request;
 use app\wealth\model\Content as ContentModel;
 use app\wealth\controller\Base;
 use think\Session;
-
+use app\wealth\model\Question as QuestionModel;
 class Content extends Base
 {
     /**
@@ -19,9 +19,14 @@ class Content extends Base
     public function index($qid)
     {
         //查看问题详情
-        $id=Db::table('content')->where('q_id',$qid)->value('c_id');
+        $id=Db::table('question_content')->where('q_id',$qid)->value('c_id');
         $model=ContentModel::get($id);
-        return $this->fetch('index',['list'=>$model]);
+        $tagnames=Db::table('tag')->select();
+        $count=$model->count();
+        return $this->fetch('index',['list'=>$model,
+            'tagnames'=>$tagnames,
+             'count'=>$count
+        ]);
     }
 
     /**
@@ -32,31 +37,53 @@ class Content extends Base
     public function save($id=null){//$id : 修改的数据
         $request=request();
         if(is_null($id)){
-            $model=new ContentModel();//实例化-添加数据
+            $model=new QuestionModel();//实例化-添加数据
+            $cmodel=new ContentModel();
         }else{
             $model=ContentModel::get($id);//实例化-修改数据
+            $cid=Db::table('question_content')->where('q_id',$id)->value('c_id');
+            $cmodel=ContentModel::get($cid);
         }
-
         if($request->isGet()){
             $data=Session::has('data')?Session::get('data'):$model->getData();
             //获取修改数据
+            $data2=$cmodel->getData();
+            $tagnames=Db::table('tag')->select();
             return $this->fetch('save',[
                 'message'=>Session::get('message'),
-                'data'=>$data //表单中读取要修改的数据
+                'tagnames'=>$tagnames,
+                'data1'=>$data,
+                'data2'=>$data2 //表单中读取要修改的数据
             ]);//得到报错信息的值到模板中
         }elseif ($request->isPost()){
-            $data=$request->post();//收集表单数据
-            $validate=validate('Admin');
-            $ch=$validate->batch()->check($data);
+            $validate=validate('Content');
+            $ch=$validate->batch()->check(input());
             if(!$ch){
-                $this->redirect('save',[],302,[
-                    'message'=>$validate->getError(),//得到报错信息
-                    'data'=>$data
-                ]);
+               $errors=implode('/',$validate->getError());
+               $this->error($errors);
             }
-            $model->data($data);//收集表单数据
-            $model->save();//保存数据
-            $this->redirect('index');//跳转页面
+            $data1=[
+                'title'=>input('title'),
+                'u_id'=>Session::get('userInfo')['id'],
+                't_id'=>input('t_id'),
+            ];
+
+            if(is_null($id)){
+                $data1['create_time']=time();
+            }else{
+                $data1['update_time']=time();
+            }
+            $data2=[
+                'content'=>input('content')
+            ];
+            $model->data($data1)->save();
+            $cmodel->data($data2)->save();
+            if(is_null($id)){
+                $data3['q_id']=Db::table('question')->where($data1)->value('id');
+                $data3['c_id']=Db::table('content')->where($data2)->value('id');
+                Db::table('question_content')->insert($data3);
+            }
+            $this->redirect('Question/index');//跳转页面
         }
     }
 

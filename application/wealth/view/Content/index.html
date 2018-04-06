@@ -1,4 +1,14 @@
 {extend name='template/layout' /}
+{block name="tag_type"}
+{volist name="tagnames" id="row"}
+<ul>
+    <li>
+        <a href="{:url('Question/tag',['tid'=>$row['id']])}">{$row['tagname']}</a>
+    </li>
+</ul>
+{/volist}
+{/block}
+{block name="count"}{$count}{/block}
 {block name='content'}
 {$list.content}
 {/block}

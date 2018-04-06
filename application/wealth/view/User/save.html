@@ -1,0 +1,75 @@
+{extend name='template/layout' /}
+{block name="tag_type"}
+{volist name="tagnames" id="row"}
+<ul>
+    <li>
+        <a href="{:url('Question/tag',['tid'=>$row['id']])}">{$row['tagname']}</a>
+    </li>
+</ul>
+{/volist}
+{/block}
+{block name="count"}{$count}{/block}
+{block name='content'}
+<div style="padding: 10px; width: 600px" class="pull-left">
+    <form action="" method="post" enctype="multipart/form-data">
+        <img src="__ROOT__/uploads/{$data.photo}" class="img-circle pull-left" style="width:70px;height:70px; margin-left: 50px;">
+        <input type="file" style="position:absolute;top:0px;left:0px;cursor:pointer;opacity:0;width:100%;height:90px;" accept="image/*" name="photo" id="upload">
+        <div style="clear: both;padding-top: 10px">
+            <div class="form-group">
+                <label for="input-username">用户名</label>
+                <div class="input-group"><span class="input-group-addon"><i class="fa fa-user"></i></span>
+                    <input type="text" name="username" value="" placeholder="用户名" id="input-username" class="form-control" />
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="input-password" id="password1">安全密码</label>
+                <div class="input-group"><span class="input-group-addon"><i class="fa fa-lock"></i></span>
+                    <input type="password" name="passwd" value="" placeholder="安全密码" id="input-password" class="form-control" />
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="password" id="password2">再次输入密码</label>
+                <div class="input-group"><span class="input-group-addon"><i class="fa fa-lock"></i></span>
+                    <input type="password" name="passwd2" value="" placeholder="安全密码" id="password" class="form-control" />
+                </div>
+            </div>
+            <div class="text-right">
+                <button type="submit" class="btn btn-primary" ><i class="fa fa-key"></i>保存</button>
+            </div>
+        </div>
+    </form>
+</div>
+<div class="pull-right" style="width: 500px;height: 395px">
+</div>
+{/block}
+{block name='appendJs'}
+<script>
+    $(function(){
+          $('#password').blur(function () {
+              var passwd1=$('#input-password').val();
+              var passwd2=$('#password').val();
+              if(passwd1!=passwd2){
+                  $('#password2,#password1').text('两次输入密码不统一');
+                  $('#password2,#password1').css('color','red');
+              }
+          });
+        $('.btn').click(function () {
+            var passwd1=$('#input-password').val();
+            var passwd2=$('#password').val();
+            var username=$('#input-username');
+            if(passwd1!=passwd2){
+                alert('两次密码不统一');
+                return false;
+            }
+            if(passwd1==''){
+                alert('密码不能为空');
+                return false;
+            }
+            if(username==''){
+                alert('用户名不能为空');
+                return false;
+            }
+        });
+    });
+</script>
+{/block}
