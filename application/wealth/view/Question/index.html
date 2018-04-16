@@ -1,4 +1,16 @@
 {extend name='template/layout' /}
+
+{block name="addquestion"}
+{if condition="$userInfo['status']!=2"}
+<li id="dashboa">
+    <a href="{:url('Content/save')}">
+        <i class="fa fa-puzzle-piece fa-fw"></i>
+        <span>添加问题</span>
+    </a>
+</li>
+{/if}
+{/block}
+
 {block name="tag_type"}
 {volist name="tagnames" id="row"}
 <ul>
@@ -23,8 +35,8 @@
         <div id="digg_tip_8710250" class="digg_tip"></div>
     </div>
     <div class="post_item_body">
-        <h3><a class="titlelnk" href="{:url('Question',['tid'=>$row['t_id']])}" target="_blank">{$row.tags}</a></h3>
-        <p class="post_item_summary">
+        <h3><a class="titlelnk" href="{:url('Question/tag',['tid'=>$row['t_id']])}" target="_blank">{$row.tags}</a></h3>
+        <p class="post_item_summary" style="width: 1000px">
             <a href="{:url('Question/user',['uid'=>$row['u_id']])}" target="_blank"><img width="48" height="48" class="pfs" src="__ROOT__/uploads/{$userInfo.photo}" alt=""></a>{$row.title}
         </p>
         <div class="post_item_foot">
@@ -32,13 +44,25 @@
             发布于 {$row.create_time}
             <span class="article_comment"><a href="{:url('Content/index',['qid'=>$row['id']])}" title="" class="lightblue">
            &nbsp;查看详情</a></span>
+            {if condition="$userInfo['status']!=2"}
             {if condition="$userInfo['id']==$row['u_id']"}
+            <span class="article_comment"><a href="{:url('Content/save',['id'=>$row['id']])}" title="" class="lightblue">
+           &nbsp;编辑</a></span>
             <span class="article_comment"><a href="{:url('delete',['id'=>$row['id']])}" title="" class="lightblue">
            &nbsp;删除</a></span>
+            {elseif condition="$userInfo['status']==3"/}
+            <span class="article_comment"><a href="{:url('Content/save',['id'=>$row['id']])}" title="" class="lightblue">
+           &nbsp;编辑</a></span>
+            <span class="article_comment"><a href="{:url('delete',['id'=>$row['id']])}" title="" class="lightblue">
+           &nbsp;删除</a></span>
+            {/if}
             {/if}
         </div>
     </div>
     <div class="clear"></div>
 </div>
 {/volist}
+<div class="col-sm-6 text-left">
+    {$page->render()}
+</div>
 {/block}

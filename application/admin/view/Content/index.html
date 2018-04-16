@@ -1,0 +1,74 @@
+{extend name='template/layout'/}
+{block name="content"}
+<div id="content">
+    <div class="page-header">
+        <div class="container-fluid">
+            <div class="pull-right">
+                <a href="{:url('Content/save')}" data-toggle="tooltip" title="重建" class="btn btn-default">
+                    <i class="fa fa-refresh"></i>
+                </a>
+                <button type="button" datea-toggle="tooltip" title="删除" class="btn btn-danger" onclick="confirm('确认？') ? $('#form-category').submit() : false;">
+                    <i class="fa fa-trash-o"></i>
+                </button>
+            </div>
+            <h1>内容展示</h1>
+            <ul class="breadcrumb">
+                <li>
+                    <a href="">管理首页</a>
+                </li>
+                <li>
+                    <a href="">内容列表</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div class="container-fluid">
+        <div class="panel panel-default">X
+            <div class="panel-heading">
+                <h3 class="panel-title">
+                    <i class="fa fa-list"></i>
+                    内容列表
+                </h3>
+            </div>
+            <a href="{:url('Ques/index')}" class="btn btn-primary">返回</a>
+            <a href="{:url('Content/esc')}" class="btn btn-primary">正序</a>
+            <a href="{:url('Content/desc')}" class="btn btn-primary">倒序</a>
+            <div class="panel-body">
+                <form action="" method="post" enctype="multipart/form-data" id="form-category">
+                    <div class="table-responsive">
+                        <table class="table table-bordered table-hover">
+                            <thead>
+                            <tr>
+                                <td style="width: 1px;" class="text-center">
+                                    <input type="checkbox" onclick="$('input[name*=\'selected\']').prop('checked', this.checked);" />
+                                </td>
+                                <td class="text-left">
+                                    编号
+                                </td>
+                                <td class="text-left">
+                                   内容
+                                </td>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {volist name="result" id="row"}
+                            <tr>
+                                <td class="text-center">
+                                    <input type="checkbox" name="selected[]" value="62" />
+                                </td>
+                                <td class="text-left">
+                                    {$row['id']}
+                                </td>
+                                <td class="text-left">
+                                    <p>{$row['content']}</p>
+                                </td>
+                            </tr>
+                            </tbody>
+                            {/volist}
+                        </table>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    {/block}

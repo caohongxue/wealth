@@ -10,5 +10,11 @@
 {/block}
 {block name="count"}{$count}{/block}
 {block name='content'}
-{$list.content}
+<div style="width: 1150px;margin: 0 auto">
+    <div style="font-size: 15px;color: red;margin-left: 20px;line-height: 20px">问题是: <br>{$data}</div>
+    <div style="margin-left: 40px">
+        解决办法: <br>
+        {$list.content}
+    </div>
+</div>
 {/block}

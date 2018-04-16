@@ -20,6 +20,8 @@ class Base extends Controller{
         if(!$userInfo){
             $this->redirect('User/login');
         }
+        $user=Db::table('user')->find($userInfo['id']);
+        Session::set('user',$user);
     }
 
 }

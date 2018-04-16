@@ -1,0 +1,79 @@
+{extend name='template/layout'/}
+{block name="content"}
+<div id="content">
+    <div class="page-header">
+        <div class="container-fluid">
+            <div class="pull-right">
+                <a href="{:url('Content/save')}" data-toggle="tooltip" title="重建" class="btn btn-default">
+                    <i class="fa fa-refresh"></i>
+                </a>
+
+            </div>
+            <h1>标记详情</h1>
+            <ul class="breadcrumb">
+                <li>
+                    <a href="">管理首页</a>
+                </li>
+                <li>
+                    <a href="">标记详情</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div class="container-fluid">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">
+                    <i class="fa fa-list"></i>
+                    标记详情
+                </h3>
+            </div>
+            <div class="panel-body">
+                <form action="" method="post" enctype="multipart/form-data" id="form-category">
+                    <div class="table-responsive">
+                        <table class="table table-bordered table-hover">
+                            <thead>
+                            {volist name='list' id='val'}
+                            <tr>
+                                <td style="width: 1px;" class="text-center">
+                                    <input type="checkbox" onclick="$('input[name*=\'selected\']').prop('checked', this.checked);" />
+                                </td>
+                                <td class="text-left">
+                                    标记编号
+                                </td>
+                                <td class="text-left">
+                                    {$val.id}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="width: 1px;" class="text-center">
+                                    <input type="checkbox" onclick="$('input[name*=\'selected\']').prop('checked', this.checked);" />
+                                </td>
+                                <td class="text-left">
+                                    标记名称
+                                </td>
+                                <td class="text-left">
+                                    {$val.tagname}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="width: 1px;" class="text-center">
+                                    <input type="checkbox" onclick="$('input[name*=\'selected\']').prop('checked', this.checked);" />
+                                </td>
+                                <td class="text-left">
+                                    标题
+                                </td>
+                                <td class="text-left">
+                                    {$val.title}
+                                </td>
+                            </tr>
+                           {/volist}
+                        </table>
+                    </div>
+                </form>
+
+            </div>
+        </div>
+    </div>
+</div>
+{/block}

@@ -19,12 +19,15 @@ class Content extends Base
     public function index($qid)
     {
         //查看问题详情
+        $list=Db::table('question')->where('id',$qid)->find()['title'];
         $id=Db::table('question_content')->where('q_id',$qid)->value('c_id');
         $model=ContentModel::get($id);
         $tagnames=Db::table('tag')->select();
-        $count=$model->count();
+        $c=new QuestionModel();
+        $count=$c->count();
         return $this->fetch('index',['list'=>$model,
             'tagnames'=>$tagnames,
+             'data'=>$list,
              'count'=>$count
         ]);
     }
@@ -40,19 +43,26 @@ class Content extends Base
             $model=new QuestionModel();//实例化-添加数据
             $cmodel=new ContentModel();
         }else{
-            $model=ContentModel::get($id);//实例化-修改数据
+            $model=QuestionModel::get($id);//实例化-添加数据
             $cid=Db::table('question_content')->where('q_id',$id)->value('c_id');
             $cmodel=ContentModel::get($cid);
         }
         if($request->isGet()){
-            $data=Session::has('data')?Session::get('data'):$model->getData();
+            $data=$model->getData();
+            if(empty($data)){
+                $data['t_id']=1;
+            }
+            $c=new QuestionModel();
+            $count=$c->count();
             //获取修改数据
             $data2=$cmodel->getData();
             $tagnames=Db::table('tag')->select();
             return $this->fetch('save',[
+                'userInfo'=>Session::get('user'),
                 'message'=>Session::get('message'),
                 'tagnames'=>$tagnames,
                 'data1'=>$data,
+                'count'=>$count,
                 'data2'=>$data2 //表单中读取要修改的数据
             ]);//得到报错信息的值到模板中
         }elseif ($request->isPost()){
@@ -64,7 +74,7 @@ class Content extends Base
             }
             $data1=[
                 'title'=>input('title'),
-                'u_id'=>Session::get('userInfo')['id'],
+                'u_id'=>Session::get('user')['id'],
                 't_id'=>input('t_id'),
             ];
 

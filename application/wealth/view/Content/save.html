@@ -1,4 +1,14 @@
 {extend name='template/layout' /}
+{block name="addquestion"}
+{if condition="$userInfo['status']!=2"}
+<li id="dashboa">
+    <a href="{:url('Content/save')}">
+        <i class="fa fa-puzzle-piece fa-fw"></i>
+        <span>添加问题</span>
+    </a>
+</li>
+{/if}
+{/block}
 {block name="tag_type"}
 {volist name="tagnames" id="row"}
 <ul>
@@ -8,31 +18,35 @@
 </ul>
 {/volist}
 {/block}
+{block name="count"}{$count}{/block}
 {block name='content'}
-<form action="{:url('Content/save')}" method="post">
-<div id="aaa" style="width: 1275px">
-    <h3 style="font-size: 25px;color:#ad4426">请输入你的问题信息</h3>
-        <textarea name="title" cols="196" rows="10"></textarea>
-        <div style="height: 50px ;font-size: 15px">
-            {volist name="tagnames" id="row"}
-            <input type="radio" value="{$row.id}" name="t_id"> {$row.tagname}
-            {/volist}
-        </div>
-        <!-- 加载编辑器的容器 -->
-        <script id="ssd" name="content" type="text/plain">
+<div style="width: 1100px;margin: 0 auto">
+    <form action="" method="post" enctype="multipart/form-data" id="form-save">
+        <div id="aaa" style="width: 1100px">
+            <h3 style="font-size: 25px;color:#ad4426;line-height: 50px;">请输入你的问题信息:</h3>
+            <textarea name="title" cols="169" rows="10">{$data1['title']|default=''}</textarea>
+            <div style="height: 50px ;font-size: 15px">
+                标签分类设置
+                {volist name="tagnames" id="row"}
+                <input style="vertical-align:top;" type="radio" value="{$row.id}" name="t_id" {if condition="$row['id']==$data1['t_id']"}checked{/if}> {$row.tagname}
+                {/volist}
+            </div>
+            <!-- 加载编辑器的容器 -->
+            <script id="ssd" name="content" type="text/plain">
            {if condition="isset($data2['content'])"}
                 {$data2.content}
            {/if}
         </script>
-    <!-- 配置文件 -->
-    <script type="text/javascript" src="__STATIC__/ueditor/ueditor.config.js"></script>
-    <!-- 编辑器源码文件 -->
-    <script type="text/javascript" src="__STATIC__/ueditor/ueditor.all.js"></script>
-    <!-- 实例化编辑器 -->
-    <script type="text/javascript">
-        var editor = UE.getEditor('ssd');
-    </script>
+            <!-- 配置文件 -->
+            <script type="text/javascript" src="__STATIC__/ueditor/ueditor.config.js"></script>
+            <!-- 编辑器源码文件 -->
+            <script type="text/javascript" src="__STATIC__/ueditor/ueditor.all.js"></script>
+            <!-- 实例化编辑器 -->
+            <script type="text/javascript">
+                var editor = UE.getEditor('ssd');
+            </script>
+        </div>
+        <a style="background-color: #0d13aa;color: #FFFFFF;display: inline-block;width: 70px;height: 30px;line-height: 30px;text-align: center;margin-left: -4px; cursor: pointer;margin: 10px 20px " onclick="$('#form-save').submit()">点击保存</a>
+    </form>
 </div>
-    <input type="submit">
-</form>
 {/block}

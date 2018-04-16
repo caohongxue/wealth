@@ -16,8 +16,8 @@
     <script src="__STATIC__/admin/javascript/common.js" type="text/javascript"></script>
     <link href="__STATIC__/admin/aggsite.css" type="text/css" rel="stylesheet" media="screen" />
 </head>
-<body style="background-color: #FFF4E6">
-<div id="container">
+<body>
+<div id="container" style="background: url('__STATIC__/admin/image/img.jpg')">
     <header id="header" class="navbar navbar-static-top">
         <div class="navbar-header">
             <a type="button" id="button-menu" class="pull-left"> <i class="fa fa-indent fa-lg"></i>
@@ -55,27 +55,22 @@
                     <span>首页展示</span>
                 </a>
             </li>
-            <li id="dashboa">
-                <a href="{:url('Content/save')}">
-                    <i class="fa fa-dashboard fa-fw"></i>
-                    <span>添加问题</span>
-                </a>
-            </li>
+            {block name="addquestion"}{/block}
             <li id="dashboa">
                 <a href="{:url('Question/user')}">
-                    <i class="fa fa-dashboard fa-fw"></i>
+                    <i class="fa fa-user fa-fw"></i>
                     <span>我的问题</span>
                 </a>
             </li>
             <li id="dashbo">
                 <a href="{:url('User/save')}">
-                    <i class="fa fa-dashboard fa-fw"></i>
+                    <i class="fa fa-cog fa-fw"></i>
                     <span>更改我的信息</span>
                 </a>
             </li>
             <li id="catalog">
                 <a class="parent">
-                    <i class="fa fa-tags fa-fw"></i>
+                    <i class="fa fa-television fa-fw"></i>
                     <span>错误分类</span>
                 </a>
                 {block name="tag_type"}
@@ -93,7 +88,7 @@
             </ul>
         </div>
     </nav>
-    <div id="content" >
+    <div id="content">
         {block name='content'}{/block}
     </div>
     <footer id="footer" style="clear: both">
@@ -102,7 +97,7 @@
         &copy; 2009-2016 All Rights Reserved.
         <br>Version 1.0
     </footer>
-</div>
+    </div>
 {block name='appendJs'}
 {/block}
 </body>

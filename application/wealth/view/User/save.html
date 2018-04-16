@@ -1,4 +1,16 @@
 {extend name='template/layout' /}
+
+{block name="addquestion"}
+{if condition="$userInfo['status']!=2"}
+<li id="dashboa">
+    <a href="{:url('Content/save')}">
+        <i class="fa fa-puzzle-piece fa-fw"></i>
+        <span>添加问题</span>
+    </a>
+</li>
+{/if}
+{/block}
+
 {block name="tag_type"}
 {volist name="tagnames" id="row"}
 <ul>
@@ -11,14 +23,15 @@
 {block name="count"}{$count}{/block}
 {block name='content'}
 <div style="padding: 10px; width: 600px" class="pull-left">
-    <form action="" method="post" enctype="multipart/form-data">
-        <img src="__ROOT__/uploads/{$data.photo}" class="img-circle pull-left" style="width:70px;height:70px; margin-left: 50px;">
-        <input type="file" style="position:absolute;top:0px;left:0px;cursor:pointer;opacity:0;width:100%;height:90px;" accept="image/*" name="photo" id="upload">
+    <form action="" method="post" enctype="multipart/form-data" id="form-save"  name ="itemsForm" >
+        <img src="__ROOT__/uploads/{$data.photo}" class="img-circle pull-left" style="width:70px;height:70px; margin-left: 50px;float: left">
+        <input type="file" style="position:absolute;top:44px;left:280px;cursor:pointer;opacity:0;width:100px;height:90px;" accept="image/*" name="photo" id="upload">
+        <a style="background-color: #5daa53;color: #FFFFFF;display: inline-block;width: 80px;height: 30px;line-height: 30px;text-align: center;margin-left: -4px; cursor: pointer;margin: 20px 46px;clear: both;float: left" id="uploads">点击修改头像</a>
         <div style="clear: both;padding-top: 10px">
             <div class="form-group">
                 <label for="input-username">用户名</label>
                 <div class="input-group"><span class="input-group-addon"><i class="fa fa-user"></i></span>
-                    <input type="text" name="username" value="" placeholder="用户名" id="input-username" class="form-control" />
+                    <input type="text" name="username" value="{$data['username']|default=''}" placeholder="用户名" id="input-username" class="form-control" maxlength="30"/>
                 </div>
             </div>
             <div class="form-group">
@@ -34,7 +47,7 @@
                 </div>
             </div>
             <div class="text-right">
-                <button type="submit" class="btn btn-primary" ><i class="fa fa-key"></i>保存</button>
+                <button class="btn btn-primary"><i class="fa fa-key"></i>保存</button>
             </div>
         </div>
     </form>
@@ -53,22 +66,27 @@
                   $('#password2,#password1').css('color','red');
               }
           });
-        $('.btn').click(function () {
+          $('#uploads').click(function () {
+              document.forms['itemsForm'].action = "{:url('upload')}";
+              document.forms['itemsForm'].submit();
+          });
+        $('.btn').click(function (){
+            event.preventDefault();
             var passwd1=$('#input-password').val();
             var passwd2=$('#password').val();
             var username=$('#input-username');
             if(passwd1!=passwd2){
                 alert('两次密码不统一');
-                return false;
-            }
+            }else
             if(passwd1==''){
                 alert('密码不能为空');
-                return false;
-            }
+            }else
             if(username==''){
                 alert('用户名不能为空');
-                return false;
+            }else {
+                document.forms['itemsForm'].submit();
             }
+
         });
     });
 </script>
