@@ -20,6 +20,7 @@ class Question extends Base
     public function index()
     {
         //所有主题展示
+//        dump(session_id());exit;
 //        dump(Session::get('userInfo'));exit;
         $model=new QuestionModel();
         $list=$model->order('create_time','desc')->paginate(5);
