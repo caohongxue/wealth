@@ -44,9 +44,9 @@ class View
         $baseReplace = [
             '__ROOT__'   => $root,
             '__URL__'    => $base . '/' . $request->module() . '/' . Loader::parseName($request->controller()),
-            '__STATIC__' => $root . '/static',
-            '__CSS__'    => $root . '/static/css',
-            '__JS__'     => $root . '/static/js',
+            '__STATIC__' =>  '/static',
+            '__CSS__'    => '/static/css',
+            '__JS__'     =>  '/static/js',
         ];
         $this->replace = array_merge($baseReplace, (array) $replace);
     }
